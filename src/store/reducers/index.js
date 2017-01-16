@@ -1,5 +1,7 @@
-export default function(state, action) {
+import { combineReducers } from 'redux'
+import dataGrid from './dataGrid'
 
-    return state;
 
-}
+export default combineReducers({
+    dataGrid
+})
