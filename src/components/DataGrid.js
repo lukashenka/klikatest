@@ -14,6 +14,12 @@ export default class DataGrid extends Component {
         });
     }
 
+    componentDidMount() {
+        const {filters, pagination} = this.props.dataGrid;
+        this.props.loadTable(filters, pagination);
+        this.props.changePagination({page: 12, pageSize: 13});
+    }
+
     render() {
         const {header, pagination, filters} = this.props.dataGrid;
         const {changePagination, loadTable, changeFilter} = this.props;
@@ -31,11 +37,7 @@ export default class DataGrid extends Component {
                 </tbody>
             </table>
             <TablePagination pagination={pagination} loadTable={loadTable} changePagination={changePagination}/>
-            <DataFilter filters={filters}  loadTable={loadTable} changeFilter={changeFilter}/>
+            <DataFilter filters={filters} loadTable={loadTable} changeFilter={changeFilter}/>
         </div>
-
-
     }
-
-
 }

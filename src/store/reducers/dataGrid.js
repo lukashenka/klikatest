@@ -16,6 +16,10 @@ const initialState = {
         page: 1,
         pageCount: 20,
         pageSize: 20,
+        pageSizes: [10, 20, 30, 100]
+    },
+    sort: {
+        author: 'ASC',
     },
     filters: {
         fields: {
@@ -38,26 +42,10 @@ export function dataGrid(state = initialState, action) {
         case GET_PAGE_SUCCESS: {
             return {...state, tableData: action.payload};
         }
-        default:
-            return state;
-    }
-
-}
-
-export function changePagination(state = initialState, action) {
-    switch (action.type) {
         case SET_PAGINATION: {
-            console.log(state.pagination);
             let pagination = {...state.pagination, ...action.payload};
             return {...state, pagination: pagination};
         }
-        default:
-            return state;
-    }
-}
-
-export function changeFilter(state = initialState, action) {
-    switch (action.type) {
         case SET_FILTER: {
             let filterValues = {...state.filters.filterValues, ...action.payload};
             let filters = state.filters;

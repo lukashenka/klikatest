@@ -42,10 +42,11 @@ export function loadTable(filter, pagination) {
 
 export function changePagination(pagination) {
 
-    return {
-        type: SET_PAGINATION,
-        payload: pagination
-
+    return (dispatch) => {
+        dispatch({
+            type: SET_PAGINATION,
+            payload: pagination
+        })
     }
 }
 
