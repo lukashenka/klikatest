@@ -14,6 +14,14 @@ app.get("/", function(req, res) {
     res.sendFile(__dirname + '/index.html')
 })
 
+
+app.get("/api/songs", function(req, res) {
+    var dataGrid = require('./server/SongRepository');
+    dataGrid.getData({}, function (data) {
+        res.send(data);
+    });
+});
+
 app.listen(port, function(error) {
     if (error) {
         console.error(error)

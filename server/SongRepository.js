@@ -1,29 +1,55 @@
-module.exports = function () {
-    function SongRepository() {
+var sqlite3 = require('sqlite3').verbose();
+var defaults = require('defaults');
+var db = new sqlite3.Database(__dirname + "/db/track_metadata.bin");
 
-        let sqlite3 = require('sqlite3').verbose();
-        let db = new sqlite3.Database(':memory:');
-        
-        function migrate() {
-            db.serialize(function() {
-                db.run("CREATE TABLE songs (id INTEGER PRIMARY KEY ASC, author CHAR(50), )");
+var SongRepository = {};
+SongRepository.getData = function (options, success, error) {
 
-                var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
-                for (var i = 0; i < 10; i++) {
-                    stmt.run("Ipsum " + i);
-                }
-                stmt.finalize();
-
-                db.each("SELECT rowid AS id, info FROM lorem", function(err, row) {
-                    console.log(row.id + ": " + row.info);
-                });
-            });
-
-            db.close();
+    options = defaults(options,
+        {
+            searchFields: [],
+            sortFields: {id: 'DESC'},
+            pageSize: 100,
+            page: 1
         }
-        
+    );
+    var dataGrid = {};
 
-    }
+    db.get("SELECT COUNT(*) as cnt FROM songs", function (err, row) {
+        if (err) {
+            error(err);
+        }
+        dataGrid.cnt = row.cnt;
 
-    return SongRepository;
+        var offset = (options.page - 1) * options.pageSize;
+        var limit = options.pageSize;
+        db.all("SELECT * FROM songs LIMIT ?,? ", [offset, limit], function (err, data) {
+            if (err) {
+                error(err);
+            }
+            dataGrid.data = data;
+
+            db.get("" +
+                "SELECT GROUP_CONCAT(DISTINCT(artist_name)) as artists, " +
+                "GROUP_CONCAT(DISTINCT(genre)) as genres, " +
+                "GROUP_CONCAT(DISTINCT(year)) AS years " +
+                "FROM songs", function (err, row) {
+                if (err) {
+                    error(err);
+                }
+                dataGrid.filters = {
+                  author: row.artists.split(","),
+                  genre: row.genres.split(","),
+                  year: row.years.split(","),
+                };
+                success(dataGrid);
+                db.close();
+            });
+        });
+    });
+
+
+
 };
+
+module.exports = SongRepository;
