@@ -47,9 +47,9 @@ export function dataGrid(state = initialState, action) {
 export function changePagination(state = initialState, action) {
     switch (action.type) {
         case SET_PAGINATION: {
-            let newState = {...state};
-            newState.pagination = {...state.pagination, ...action.payload};
-            return newState;
+            console.log(state.pagination);
+            let pagination = {...state.pagination, ...action.payload};
+            return {...state, pagination: pagination};
         }
         default:
             return state;
@@ -59,9 +59,10 @@ export function changePagination(state = initialState, action) {
 export function changeFilter(state = initialState, action) {
     switch (action.type) {
         case SET_FILTER: {
-            let newState = Object.assign({}, state);
-            newState.filters.filterValues = {...state.filters.filterValues, ...action.payload};
-            return newState;
+            let filterValues = {...state.filters.filterValues, ...action.payload};
+            let filters = state.filters;
+            filters.filterValues = filterValues;
+            return {...state, filters: filters};
         }
         default:
             return state;

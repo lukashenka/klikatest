@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
+import { changePagination } from './../actions/DataGridAction'
+import { connect } from 'react-redux'
 
-export default class TablePagination extends Component {
+export class TablePagination extends Component {
 
     setPage(page) {
         let pageSize = 100;
-        const {changePagination} = this.props;
-        changePagination({page: page, pageSize: pageSize});
+        this.props.dispatch(changePagination({page: page, pageSize: pageSize}));
 
     }
 
@@ -33,3 +34,5 @@ export default class TablePagination extends Component {
 
     }
 }
+
+export default connect()(TablePagination)
