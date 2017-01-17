@@ -5,9 +5,9 @@ import DataFilter from '../components/DataFilter';
 export default class DataGrid extends Component {
 
     tableRows() {
-        const {tableData} = this.props.dataGrid;
+        const {tableData, header} = this.props.dataGrid;
         return tableData.map((columns, index) => {
-            var row = Object.keys(columns).map((key) => {
+            var row = Object.keys(header).map((key) => {
                 return <td key={key}>{columns[key]}</td>;
             });
             return <tr key={index}>{row}</tr>;
@@ -15,9 +15,7 @@ export default class DataGrid extends Component {
     }
 
     componentDidMount() {
-        const {filters, pagination} = this.props.dataGrid;
-        this.props.loadTable(filters, pagination);
-        this.props.changePagination({page: 12, pageSize: 13});
+        this.props.loadTable(this.props.dataGrid);
     }
 
     render() {

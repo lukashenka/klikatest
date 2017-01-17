@@ -30,7 +30,7 @@ SongRepository.getData = function (options, success, error) {
             dataGrid.data = data;
 
             db.get("" +
-                "SELECT GROUP_CONCAT(DISTINCT(artist_name)) as artists, " +
+                "SELECT GROUP_CONCAT(DISTINCT(author)) as artists, " +
                 "GROUP_CONCAT(DISTINCT(genre)) as genres, " +
                 "GROUP_CONCAT(DISTINCT(year)) AS years " +
                 "FROM songs", function (err, row) {
@@ -43,7 +43,6 @@ SongRepository.getData = function (options, success, error) {
                   year: row.years.split(","),
                 };
                 success(dataGrid);
-                db.close();
             });
         });
     });

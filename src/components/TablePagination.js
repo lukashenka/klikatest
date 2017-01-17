@@ -1,4 +1,5 @@
-import React, {PropTypes, Component} from 'react'
+import React, {PropTypes, Component} from 'react';
+import lodash from 'lodash';
 
 export default class TablePagination extends Component {
 
@@ -14,23 +15,33 @@ export default class TablePagination extends Component {
     }
 
     render() {
-        const {page, pageCount, pageSizes, pageSize} = this.props.pagination;
+        const {page, pageCount, pageSizes, pageSize, maxPages} = this.props.pagination;
+        const minPage = page - Math.ceil(maxPages / 2);
+        const maxPage = page + Math.ceil(maxPages / 2);
+        const pages = lodash.range(minPage > 0 ? minPage : 1, maxPage);
         return <div>
-            <nav aria-label='Page navigation'>
+            <nav>
                 <ul className='pagination'>
+                    {page !== 1 &&
                     <li>
-                        <a href='#' aria-label='Previous'>
-                            <span aria-hidden='true'>&laquo;</span>
+                        <a onClick={()=> {
+                            this.setPage(page - 1)
+                        }} href='#'>
+                            <span>&laquo;</span>
                         </a>
                     </li>
-                    {[...Array(pageCount)].map((x, index) =>
-                        <li className={(page == index ? 'active' : '' )} key={index}><a href='#' onClick={()=> {
-                            this.setPage(index)
-                        }}>{index}</a></li>
+
+                    }
+                    {pages.map((pageIndex) =>
+                        <li className={(page == pageIndex ? 'active' : '' )} key={pageIndex}><a href='#' onClick={()=> {
+                            this.setPage(pageIndex)
+                        }}>{pageIndex}</a></li>
                     )}
                     <li>
-                        <a href='#' aria-label='Next'>
-                            <span aria-hidden='true'>&raquo;</span>
+                        <a onClick={()=> {
+                            this.setPage(page + 1)
+                        }} href='#'>
+                            <span>&raquo;</span>
                         </a>
                     </li>
                 </ul>

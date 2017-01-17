@@ -5,54 +5,52 @@ import {
     SET_FILTER
 } from '../constants/dataGrid'
 
-export function loadTable(filter, pagination) {
+import fetch from 'isomorphic-fetch'
+import qs from 'qs'
 
+export function loadTable(state) {
     return (dispatch) => {
         dispatch({
             type: GET_PAGE_REQUEST
         });
 
-        setTimeout(() => {
-            dispatch({
+        const {page, pageSize} = state.pagination;
+        const {filterValues} = state.filters;
+
+        let params = {
+            page: page,
+            pageSize: pageSize,
+            filter: filterValues,
+            sort: state.sort
+        };
+
+        params = qs.stringify(params);
+        console.log(params);
+        return fetch('/api/songs?' + params).then(response => response.json())
+            .then(json => dispatch({
                 type: GET_PAGE_SUCCESS,
-                payload: [
-                    {
-                        author: filter.author + pagination.page,
-                        song: filter.song + pagination.page,
-                        genre: filter.genre + pagination.page,
-                        year: filter.year + pagination.page
-                    },
-                    {
-                        author: filter.author + pagination.page,
-                        song: filter.song + pagination.page,
-                        genre: filter.genre + pagination.page,
-                        year: filter.year + pagination.page
-                    },
-                    {
-                        author: filter.author + pagination.page,
-                        song: filter.song + pagination.page,
-                        genre: filter.genre + pagination.page,
-                        year: filter.year + pagination.page
-                    },
-                ]
-            })
-        }, 1000)
+                payload: json
+            }))
+
     }
 }
 
 export function changePagination(pagination) {
-
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch({
             type: SET_PAGINATION,
             payload: pagination
-        })
+        });
+        dispatch(loadTable(getState().dataGrid));
     }
 }
 
 export function changeFilter(filters) {
-    return {
-        type: SET_FILTER,
-        payload: filters
+    return (dispatch, getState) => {
+        dispatch({
+            type: SET_FILTER,
+            payload: filters
+        });
+        dispatch(loadTable(getState().dataGrid));
     }
 }

@@ -16,7 +16,8 @@ const initialState = {
         page: 1,
         pageCount: 20,
         pageSize: 20,
-        pageSizes: [10, 20, 30, 100]
+        pageSizes: [10, 20, 30, 100],
+        maxPages: 10,
     },
     sort: {
         author: 'ASC',
@@ -24,7 +25,7 @@ const initialState = {
     filters: {
         fields: {
             author: 'Исполнитель',
-            song: 'Песня',
+            // song: 'Песня',
             genre: 'Жанр',
             year: 'Год'
         },
@@ -40,7 +41,12 @@ const initialState = {
 export function dataGrid(state = initialState, action) {
     switch (action.type) {
         case GET_PAGE_SUCCESS: {
-            return {...state, tableData: action.payload};
+            const tableData = action.payload.data;
+            const pagination = {
+                ...state.pagination,
+                pageCount: Math.ceil(action.payload.cnt / state.pagination.pageSize)
+            };
+            return {...state, tableData: tableData, pagination: pagination};
         }
         case SET_PAGINATION: {
             let pagination = {...state.pagination, ...action.payload};
