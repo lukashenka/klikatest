@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import TablePagination from '../components/TablePagination';
+import DataFilter from '../components/DataFilter';
 
 export default class DataGrid extends Component {
 
@@ -14,13 +15,13 @@ export default class DataGrid extends Component {
     }
 
     render() {
-        const {header, pagination} = this.props.dataGrid;
-        const {getPage} = this.props;
+        const {header, pagination, filters} = this.props.dataGrid;
+        const {changePagination, loadTable, changeFilter} = this.props;
         return <div>
             <table className='table-striped table-bordered table-condensed table-hover'>
                 <thead>
                 <tr>
-                    {Object.keys(header).map(function (key) {
+                    {Object.keys(header).map((key) => {
                         return <th key={key}>{header[key]}</th>
                     })}
                 </tr>
@@ -29,7 +30,8 @@ export default class DataGrid extends Component {
                 {this.tableRows()}
                 </tbody>
             </table>
-            <TablePagination pagination={pagination} getPage={getPage}/>
+            <TablePagination pagination={pagination} loadTable={loadTable} changePagination={changePagination}/>
+            <DataFilter filters={filters}  loadTable={loadTable} changeFilter={changeFilter}/>
         </div>
 
 

@@ -8,10 +8,15 @@ import DataGrid from '../components/DataGrid';
 class App extends Component {
     render() {
         const {dataGrid, pagination} = this.props;
-        console.log(this.props);
-        const {getPage} = this.props.dataGridActions;
+        const {loadTable, changePagination, changeFilter} = this.props.dataGridActions;
         return <div className='row'>
-            <DataGrid dataGrid={dataGrid} pagination={pagination} getPage={getPage}/>
+            <DataGrid
+                dataGrid={dataGrid}
+                pagination={pagination}
+                loadTable={loadTable}
+                changePagination={changePagination}
+                changeFilter={changeFilter}
+            />
         </div>
     }
 }
@@ -19,7 +24,7 @@ class App extends Component {
 function mapStateToProps(state) {
 
     return {
-        dataGrid: {...state.dataGrid}
+        dataGrid: state.dataGrid
     }
 }
 

@@ -2,15 +2,15 @@ import React, {Component} from 'react'
 
 export default class TablePagination extends Component {
 
-
-    getPage(page) {
+    setPage(page) {
         let pageSize = 100;
-        const {getPage} = this.props;
-        getPage(page, pageSize);
-    }
-    render() {
-        const {pageCount} = this.props.pagination;
+        const {changePagination} = this.props;
+        changePagination({page: page, pageSize: pageSize});
 
+    }
+
+    render() {
+        const {page, pageCount} = this.props.pagination;
         return <nav aria-label='Page navigation'>
             <ul className='pagination'>
                 <li>
@@ -18,8 +18,10 @@ export default class TablePagination extends Component {
                         <span aria-hidden='true'>&laquo;</span>
                     </a>
                 </li>
-                {[...Array(pageCount)].map((x, i) =>
-                    <li key={i}><a onClick={this.getPage(i)}>{i}</a></li>
+                {[...Array(pageCount)].map((x, index) =>
+                    <li className={(page == index ?  'active' : '' )} key={index}><a href='#' onClick={()=> {
+                        this.setPage(index)
+                    }}>{index}</a></li>
                 )}
                 <li>
                     <a href='#' aria-label='Next'>

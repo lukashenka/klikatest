@@ -1,10 +1,11 @@
 import {
     GET_PAGE_REQUEST,
     GET_PAGE_SUCCESS,
-    GET_PAGE_ERROR
+    SET_PAGINATION,
+    SET_FILTER
 } from '../constants/dataGrid'
 
-export function getPage(page, pageSize = 10) {
+export function loadTable(filter, pagination) {
 
     return (dispatch) => {
         dispatch({
@@ -16,19 +17,41 @@ export function getPage(page, pageSize = 10) {
                 type: GET_PAGE_SUCCESS,
                 payload: [
                     {
-                        author: 'Исполнитель' + page,
-                        song: 'Песня' + page,
-                        genre: 'Жанр' + page,
-                        year: '2013' + page
+                        author: filter.author + pagination.page,
+                        song: filter.song + pagination.page,
+                        genre: filter.genre + pagination.page,
+                        year: filter.year + pagination.page
                     },
                     {
-                        author: 'Исполнитель' + page,
-                        song: 'Песня' + page,
-                        genre: 'Жанр' + page,
-                        year: '2016' + page
-                    }
+                        author: filter.author + pagination.page,
+                        song: filter.song + pagination.page,
+                        genre: filter.genre + pagination.page,
+                        year: filter.year + pagination.page
+                    },
+                    {
+                        author: filter.author + pagination.page,
+                        song: filter.song + pagination.page,
+                        genre: filter.genre + pagination.page,
+                        year: filter.year + pagination.page
+                    },
                 ]
             })
         }, 1000)
+    }
+}
+
+export function changePagination(pagination) {
+
+    return {
+        type: SET_PAGINATION,
+        payload: pagination
+
+    }
+}
+
+export function changeFilter(filters) {
+    return {
+        type: SET_FILTER,
+        payload: filters
     }
 }

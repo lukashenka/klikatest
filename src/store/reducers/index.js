@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux'
-import dataGrid from './dataGrid'
+import {dataGrid, changeFilter, changePagination } from './dataGrid'
 
 
 export default combineReducers({
-    dataGrid
+    dataGrid,
+    changeFilter,
+    changePagination
 })
