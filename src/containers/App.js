@@ -9,7 +9,7 @@ class App extends Component {
     render() {
         const {dataGrid, pagination} = this.props;
         const {loadTable, changePagination, changeFilter, changeSort} = this.props.dataGridActions;
-        return <div className='row'>
+        return <div>
             <DataGrid
                 dataGrid={dataGrid}
                 pagination={pagination}

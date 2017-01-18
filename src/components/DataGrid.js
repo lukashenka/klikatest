@@ -22,22 +22,30 @@ export default class DataGrid extends Component {
     render() {
         const {header, pagination, filters, sort} = this.props.dataGrid;
         const {changePagination, changeSort, changeFilter} = this.props;
-        return <div>
-            <table className='table-striped table-bordered table-condensed table-hover'>
-                <thead>
-                <tr>
-                    {Object.keys(header).map((key) => {
-                        return <th key={key}>{header[key]}</th>
-                    })}
-                </tr>
-                </thead>
-                <tbody>
-                {this.tableRows()}
-                </tbody>
-            </table>
-            <TablePagination pagination={pagination} changePagination={changePagination}/>
-            <DataFilter filters={filters}  changeFilter={changeFilter}/>
-            <DataSort sort={sort} changeSort={changeSort} header={header}/>
+        return <div className='container'>
+            <div id='dataFilter' className='row'>
+                <DataFilter filters={filters} changeFilter={changeFilter}/>
+            </div>
+            <div className='row'>
+                <DataSort sort={sort} changeSort={changeSort} header={header}/>
+            </div>
+            <div className='row'>
+                <table className='col-sm-12 table-striped table-bordered table-condensed table-hover'>
+                    <thead>
+                    <tr>
+                        {Object.keys(header).map((key) => {
+                            return <th key={key}>{header[key]}</th>
+                        })}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.tableRows()}
+                    </tbody>
+                </table>
+            </div>
+            <div className='row'>
+                <TablePagination pagination={pagination} changePagination={changePagination}/>
+            </div>
         </div>
     }
 }
