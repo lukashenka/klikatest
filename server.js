@@ -21,6 +21,7 @@ app.get("/api/songs", function (req, res) {
         pageSize: req.query.pageSize,
         page: req.query.page,
         filter: req.query.filter,
+        sort: req.query.sort,
     };
     dataGrid.getData(options, function (data) {
         res.send(data);

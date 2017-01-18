@@ -8,7 +8,7 @@ SongRepository.getData = function (options, success, error) {
     options = defaults(options,
         {
             filter: {},
-            sortFields: {id: 'DESC'},
+            sort: {author: 'ASC'},
             pageSize: 100,
             page: 1
         }
@@ -22,20 +22,19 @@ SongRepository.getData = function (options, success, error) {
     var where = whereFilter.filter(function (value) {
         return value !== null;
     }).join(" AND ");
-    // Итак сойдет
+    // Итак сойдет с иньекциями
     where = where ? "WHERE " + where : "";
+    let sort = options.sort ? "ORDER BY " + Object.keys(options.sort)[0] + " " + options.sort[Object.keys(options.sort)[0]] : "";
 
-    db.get("SELECT COUNT(*) as cnt FROM songs " + where, function (err, row) {
+    db.get("SELECT COUNT(*) as cnt FROM songs " + where + " " + sort, function (err, row) {
         if (err) {
             error(err);
         }
         dataGrid.cnt = row.cnt;
-
         var offset = (options.page - 1) * options.pageSize;
         var limit = options.pageSize;
 
-
-        db.all("SELECT * FROM songs " + where + "  LIMIT ?,? ", [offset, limit], function (err, data) {
+        db.all("SELECT * FROM songs " + where + " " + sort + "  LIMIT ?,? ", [offset, limit], function (err, data) {
             if (err) {
                 error(err);
             }

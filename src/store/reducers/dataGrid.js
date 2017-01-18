@@ -74,7 +74,9 @@ export function dataGrid(state = initialState, action) {
             return {...state, filters: filters, pagination: pagination};
         }
         case SET_SORT_FIELD: {
-            let sort = {...state.sort, ...action.payload};
+            let sortField = action.payload;
+            let sort = state.sort;
+            sort.sortField = sortField;
             return {...state, sort: sort};
         }
         default:
