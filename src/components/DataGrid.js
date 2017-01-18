@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import TablePagination from '../components/TablePagination';
 import DataFilter from '../components/DataFilter';
 import DataSort from '../components/DataSort';
+import Preloader from '../components/Preloader';
 
 export default class DataGrid extends Component {
 
@@ -20,7 +21,7 @@ export default class DataGrid extends Component {
     }
 
     render() {
-        const {header, pagination, filters, sort} = this.props.dataGrid;
+        const {header, pagination, filters, sort, fetching} = this.props.dataGrid;
         const {changePagination, changeSort, changeFilter} = this.props;
         return <div className='container'>
             <div id='dataFilter' className='row'>
@@ -43,6 +44,7 @@ export default class DataGrid extends Component {
                     </tbody>
                 </table>
             </div>
+            <Preloader display={fetching}/>
             <div className='row'>
                 <TablePagination pagination={pagination} changePagination={changePagination}/>
             </div>

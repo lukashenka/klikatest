@@ -13,7 +13,9 @@ app.use(webpackHotMiddleware(compiler))
 app.get("/", function (req, res) {
     res.sendFile(__dirname + '/index.html')
 })
-
+app.get("/preloader/", function (req, res) {
+    res.sendFile(__dirname + '/public/preloader.jpeg')
+})
 
 app.get("/api/songs", function (req, res) {
     var dataGrid = require('./server/SongRepository');

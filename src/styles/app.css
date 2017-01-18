@@ -4,3 +4,10 @@
 #pageSizer {
     margin: 0!important;
 }
+
+#preloader {
+    background-image: url("/preloader");
+    background-repeat: no-repeat;
+    height: 500px;
+    background-position: center;
+}
