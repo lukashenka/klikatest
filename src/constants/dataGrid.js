@@ -3,3 +3,4 @@ export const GET_PAGE_SUCCESS = 'GET_PAGE_SUCCESS';
 
 export const SET_PAGINATION = 'SET_PAGINATION';
 export const SET_FILTER = 'SET_FILTER';
+export const SET_SORT_FIELD = 'SET_SORT_FIELD';

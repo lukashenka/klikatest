@@ -8,7 +8,7 @@ import DataGrid from '../components/DataGrid';
 class App extends Component {
     render() {
         const {dataGrid, pagination} = this.props;
-        const {loadTable, changePagination, changeFilter} = this.props.dataGridActions;
+        const {loadTable, changePagination, changeFilter, changeSort} = this.props.dataGridActions;
         return <div className='row'>
             <DataGrid
                 dataGrid={dataGrid}
@@ -16,6 +16,7 @@ class App extends Component {
                 loadTable={loadTable}
                 changePagination={changePagination}
                 changeFilter={changeFilter}
+                changeSort={changeSort}
             />
         </div>
     }

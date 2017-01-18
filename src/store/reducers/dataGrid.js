@@ -1,7 +1,8 @@
 import {
     SET_FILTER,
     GET_PAGE_SUCCESS,
-    SET_PAGINATION
+    SET_PAGINATION,
+    SET_SORT_FIELD
 } from '../../constants/dataGrid'
 
 const initialState = {
@@ -20,7 +21,9 @@ const initialState = {
         maxPages: 10,
     },
     sort: {
-        author: 'ASC',
+        sortableFields: ['author', 'genre', 'year', 'song'],
+        sortField: {author: 'ASC'},
+        sortTypes: [{'ASC': 'По возрастанию'}, {'DESC': 'По убыванию'}]
     },
     filters: {
         fields: {
@@ -31,9 +34,14 @@ const initialState = {
         },
         filterValues: {
             author: null,
-            song: null,
+            // song: null,
             genre: null,
             year: null
+        },
+        filterChoice: {
+            // author: [],
+            genre: [],
+            year: [],
         }
     }
 };
@@ -42,11 +50,14 @@ export function dataGrid(state = initialState, action) {
     switch (action.type) {
         case GET_PAGE_SUCCESS: {
             const tableData = action.payload.data;
-            const pagination = {
+            const filterChoice = action.payload.filters;
+            const filters = {...state.filters, filterChoice: filterChoice};
+            let pagination = {
                 ...state.pagination,
                 pageCount: Math.ceil(action.payload.cnt / state.pagination.pageSize)
             };
-            return {...state, tableData: tableData, pagination: pagination};
+            pagination.page = pagination.page < pagination.pageCount ? pagination.page : pagination.pageCount;
+            return {...state, tableData: tableData, pagination: pagination, filters: filters};
         }
         case SET_PAGINATION: {
             let pagination = {...state.pagination, ...action.payload};
@@ -56,7 +67,15 @@ export function dataGrid(state = initialState, action) {
             let filterValues = {...state.filters.filterValues, ...action.payload};
             let filters = state.filters;
             filters.filterValues = filterValues;
-            return {...state, filters: filters};
+            let pagination = {
+                ...state.pagination,
+                page: 1
+            };
+            return {...state, filters: filters, pagination: pagination};
+        }
+        case SET_SORT_FIELD: {
+            let sort = {...state.sort, ...action.payload};
+            return {...state, sort: sort};
         }
         default:
             return state;

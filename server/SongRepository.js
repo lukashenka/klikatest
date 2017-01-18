@@ -7,7 +7,7 @@ SongRepository.getData = function (options, success, error) {
 
     options = defaults(options,
         {
-            searchFields: [],
+            filter: {},
             sortFields: {id: 'DESC'},
             pageSize: 100,
             page: 1
@@ -15,7 +15,17 @@ SongRepository.getData = function (options, success, error) {
     );
     var dataGrid = {};
 
-    db.get("SELECT COUNT(*) as cnt FROM songs", function (err, row) {
+    let whereFilter = Object.keys(options.filter).map((key) => {
+        let value = options.filter[key];
+        return value.trim() ? "`" + key + "`" + 'LIKE' + "'%" + value.trim() + "%'" : null;
+    });
+    var where = whereFilter.filter(function (value) {
+        return value !== null;
+    }).join(" AND ");
+    // Итак сойдет
+    where = where ? "WHERE " + where : "";
+
+    db.get("SELECT COUNT(*) as cnt FROM songs " + where, function (err, row) {
         if (err) {
             error(err);
         }
@@ -23,7 +33,9 @@ SongRepository.getData = function (options, success, error) {
 
         var offset = (options.page - 1) * options.pageSize;
         var limit = options.pageSize;
-        db.all("SELECT * FROM songs LIMIT ?,? ", [offset, limit], function (err, data) {
+
+
+        db.all("SELECT * FROM songs " + where + "  LIMIT ?,? ", [offset, limit], function (err, data) {
             if (err) {
                 error(err);
             }
@@ -38,15 +50,14 @@ SongRepository.getData = function (options, success, error) {
                     error(err);
                 }
                 dataGrid.filters = {
-                  author: row.artists.split(","),
-                  genre: row.genres.split(","),
-                  year: row.years.split(","),
+                    // author: row.artists.split(","),
+                    genre: row.genres.split(","),
+                    year: row.years.split(","),
                 };
                 success(dataGrid);
             });
         });
     });
-
 
 
 };

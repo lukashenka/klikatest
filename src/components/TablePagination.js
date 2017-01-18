@@ -16,16 +16,23 @@ export default class TablePagination extends Component {
 
     render() {
         const {page, pageCount, pageSizes, pageSize, maxPages} = this.props.pagination;
-        const minPage = page - Math.ceil(maxPages / 2);
-        const maxPage = page + Math.ceil(maxPages / 2);
-        const pages = lodash.range(minPage > 0 ? minPage : 1, maxPage);
+
+        let pages = lodash.range(1,pageCount);
+        if(pageCount > maxPages) {
+            const minPage = page - Math.ceil(maxPages / 2);
+            let maxPage = page + Math.ceil(maxPages / 2);
+            if(maxPage > pageCount) {
+                maxPage = pageCount + 1;
+            }
+            pages = lodash.range(minPage > 0 ? minPage : 1, maxPage);
+        }
         return <div>
             <nav>
                 <ul className='pagination'>
                     {page !== 1 &&
                     <li>
                         <a onClick={()=> {
-                            this.setPage(page - 1)
+                            this.setPage(1)
                         }} href='#'>
                             <span>&laquo;</span>
                         </a>
@@ -37,13 +44,16 @@ export default class TablePagination extends Component {
                             this.setPage(pageIndex)
                         }}>{pageIndex}</a></li>
                     )}
+
+                    {page < pageCount &&
                     <li>
                         <a onClick={()=> {
-                            this.setPage(page + 1)
+                            this.setPage(pageCount)
                         }} href='#'>
                             <span>&raquo;</span>
                         </a>
                     </li>
+                    }
                 </ul>
             </nav>
             <select className='form-control' onChange={::this.setPageSize} defaultValue={pageSize}>

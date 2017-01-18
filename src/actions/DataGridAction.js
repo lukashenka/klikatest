@@ -2,7 +2,8 @@ import {
     GET_PAGE_REQUEST,
     GET_PAGE_SUCCESS,
     SET_PAGINATION,
-    SET_FILTER
+    SET_FILTER,
+    SET_SORT_FIELD
 } from '../constants/dataGrid'
 
 import fetch from 'isomorphic-fetch'
@@ -15,13 +16,13 @@ export function loadTable(state) {
         });
 
         const {page, pageSize} = state.pagination;
-        const {filterValues} = state.filters;
+        let {filterValues} = state.filters;
 
         let params = {
             page: page,
             pageSize: pageSize,
             filter: filterValues,
-            sort: state.sort
+            sort: state.sort.sortField
         };
 
         params = qs.stringify(params);
@@ -50,6 +51,16 @@ export function changeFilter(filters) {
         dispatch({
             type: SET_FILTER,
             payload: filters
+        });
+        dispatch(loadTable(getState().dataGrid));
+    }
+}
+
+export function changeSort(sortField) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: SET_SORT_FIELD,
+            payload: sortField
         });
         dispatch(loadTable(getState().dataGrid));
     }
